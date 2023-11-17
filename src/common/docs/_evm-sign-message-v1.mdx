@@ -10,7 +10,7 @@ import Tabs from "@theme/Tabs";
 >
 <TabItem value="web3">
 
-```js
+```tsx
 /*
   Use code from the above Initializing Provider here
 */
@@ -46,14 +46,14 @@ const signedMessage = await web3.currentProvider.sendAsync({
 </TabItem>
 <TabItem value="ethers">
 
-```js
+```tsx
 /*
   Use code from the above Initializing Provider here
 */
 
 // provider is const provider = new ethers.providers.Web3Provider(web3authProvider); from above.
 
-const signer = provider.getSigner();
+const signer = await provider.getSigner();
 
 // Get user's Ethereum public address
 const fromAddress = await signer.getAddress();

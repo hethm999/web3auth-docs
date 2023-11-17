@@ -9,49 +9,27 @@ module.exports = {
     },
     "what-is-web3auth",
     "how-web3auth-works",
+    "user-flow",
     {
       type: "category",
       label: "Deciding your Product Fit",
       link: { type: "doc", id: "product-fit/product-fit" },
-      items: ["product-fit/pnp-vs-core-kit", "product-fit/user-flow", "product-fit/web3auth-for-wallets", "product-fit/web3auth-for-dapps"],
-    },
-    {
-      type: "category",
-      label: "Migration Guides",
-      link: { type: "doc", id: "migration-guide/migration-guide" },
-      items: ["migration-guide/migrating-to-v6-from-v5"]
+      items: ["product-fit/pnp-vs-core-kit", "product-fit/web3auth-for-wallets", "product-fit/web3auth-for-dapps"],
     },
     {
       type: "category",
       label: "Web3Auth Infrastructure",
       link: { type: "doc", id: "infrastructure/infrastructure" },
       items: [
-        "infrastructure/key-management",
-        // "infrastructure/sss-vs-tss-mpc",
+        "infrastructure/mpc-architecture",
+        "infrastructure/sss-architecture",
+        "infrastructure/nodes-and-dkg",
+        "infrastructure/glossary",
         {
-          type: "category",
-          label: "Technical Architecture",
-          link: { type: "doc", id: "infrastructure/technical-architecture/technical-architecture" },
-          items: [
-            {
-              type: "category",
-              label: "Role of Nodes",
-              link: { type: "doc", id: "infrastructure/technical-architecture/role-of-nodes/role-of-nodes" },
-              items: [
-                "infrastructure/technical-architecture/role-of-nodes/lifecycle",
-                "infrastructure/technical-architecture/role-of-nodes/key-generation",
-                "infrastructure/technical-architecture/role-of-nodes/logins-key-assignment",
-                "infrastructure/technical-architecture/role-of-nodes/oauth2-vs-proxy-signin",
-                {
-                  type: "link",
-                  label: "DKG Technical Specification",
-                  href: "https://github.com/torusresearch/audit/blob/master/Torus_DKG_Technical_Specification.pdf",
-                },
-              ],
-            },
-          ],
+          type: "link",
+          label: "Compliance, Audits and Trust", // The link label
+          href: "https://trust.web3auth.io", // The external URL
         },
-        "infrastructure/audits",
       ],
     },
     // Plug and Play Section
@@ -118,19 +96,49 @@ module.exports = {
       href: "/integration-builder",
     },
     "pnp/going-live",
-    // {
-    //   type: "category",
-    //   label: "Release Notes",
-    //   items: [
-    //     "pnp/release-notes/web",
-    //     "pnp/release-notes/android",
-    //     "pnp/release-notes/ios",
-    //     "pnp/release-notes/react-native",
-    //     "pnp/release-notes/flutter",
-    //     "pnp/release-notes/unity",
-    //     "pnp/release-notes/unreal",
-    //   ],
-    // },
+    {
+      type: "category",
+      label: "Migration Guides",
+      items: [
+        {
+          type: "category",
+          label: "PnP Web Modal",
+          collapsed: true,
+          collapsible: true,
+          items: ["pnp/migration-guides/modal-v6-to-v7", "pnp/migration-guides/modal-v5-to-v6"],
+        },
+        {
+          type: "category",
+          label: "PnP Web No Modal",
+          collapsed: true,
+          collapsible: true,
+          items: ["pnp/migration-guides/no-modal-v6-to-v7", "pnp/migration-guides/no-modal-v5-to-v6"],
+        },
+        {
+          type: "category",
+          label: "PnP React Native",
+          collapsed: true,
+          collapsible: true,
+          items: ["pnp/migration-guides/rn-v3-to-v4", "pnp/migration-guides/rn-v4-to-v5"],
+        },
+        {
+          type: "category",
+          label: "PnP Android",
+          collapsed: true,
+          collapsible: true,
+          items: ["pnp/migration-guides/android-v4-to-v5"],
+        },
+        {
+          type: "category",
+          label: "PnP IOS",
+          collapsed: true,
+          collapsible: true,
+          items: ["pnp/migration-guides/ios-v6-to-v7"],
+        },
+
+        "pnp/migration-guides/rn-v3-to-v4",
+      ],
+    },
     // Core Kit Section
     {
       type: "html",
@@ -139,11 +147,6 @@ module.exports = {
     },
     "core-kit/introduction",
     "core-kit/going-live",
-    // {
-    //   type: "category",
-    //   label: "Release Notes",
-    //   items: ["core-kit/release-notes/tkey", "core-kit/release-notes/sfa", "core-kit/release-notes/node"],
-    // },
     // Resources Section
     {
       type: "html",
@@ -155,10 +158,11 @@ module.exports = {
       label: "Dashboard Setup",
       link: { type: "doc", id: "dashboard-setup/dashboard-setup" },
       items: [
-        "dashboard-setup/get-client-id",
+        "dashboard-setup/projects-and-analytics",
+        "dashboard-setup/whitelisting",
         "dashboard-setup/enable-interoperability",
         "dashboard-setup/setup-custom-authentication",
-        "dashboard-setup/billing-and-user-stats",
+        "dashboard-setup/billing-and-usage",
         "dashboard-setup/roles-and-permissions",
       ],
     },
@@ -178,6 +182,19 @@ module.exports = {
             "auth-provider-setup/social-providers/facebook",
             "auth-provider-setup/social-providers/twitch",
             "auth-provider-setup/social-providers/discord",
+            "auth-provider-setup/social-providers/twitter",
+            "auth-provider-setup/social-providers/apple",
+            "auth-provider-setup/social-providers/linkedin",
+            "auth-provider-setup/social-providers/github",
+            "auth-provider-setup/social-providers/line",
+            "auth-provider-setup/social-providers/baidu",
+            "auth-provider-setup/social-providers/bitbucket",
+            "auth-provider-setup/social-providers/microsoft",
+            "auth-provider-setup/social-providers/renren",
+            "auth-provider-setup/social-providers/slack",
+            "auth-provider-setup/social-providers/spotify",
+            "auth-provider-setup/social-providers/vkontakte",
+            "auth-provider-setup/social-providers/yandex",
           ],
           collapsible: true,
           collapsed: false,
@@ -223,6 +240,10 @@ module.exports = {
             "connect-blockchain/moonbeam",
             "connect-blockchain/moonriver",
             "connect-blockchain/klaytn",
+            "connect-blockchain/flare",
+            "connect-blockchain/songbird",
+            "connect-blockchain/zkatana",
+            "connect-blockchain/skale",
           ],
           collapsible: true,
           collapsed: false,
@@ -239,6 +260,7 @@ module.exports = {
             "connect-blockchain/aptos",
             "connect-blockchain/cosmos",
             "connect-blockchain/near",
+            "connect-blockchain/polkadot",
           ],
           collapsible: true,
           collapsed: false,
@@ -256,12 +278,14 @@ module.exports = {
       label: "Troubleshooting",
       link: { type: "doc", id: "troubleshooting/troubleshooting" },
       items: [
+        "troubleshooting/different-private-key",
         "troubleshooting/sdk-errors-warnings",
         "troubleshooting/error-429",
         "troubleshooting/webpack-issues",
         "troubleshooting/vite-issues",
+        "troubleshooting/svelte-issues",
+        "troubleshooting/metro-issues",
         "troubleshooting/jwt-errors",
-        "troubleshooting/different-wallet-address-issue",
         "troubleshooting/supported-browsers",
         "troubleshooting/react-big-int-error",
       ],
@@ -278,7 +302,16 @@ module.exports = {
       href: "/sdk",
     },
     {
-      Legal: ["legal/cookie-policy", "legal/privacy-policy", "legal/terms-and-conditions"],
+      Legal: [
+        "legal/cookie-policy",
+        "legal/privacy-policy",
+        "legal/terms-and-conditions",
+        {
+          type: "link",
+          label: "Trust Center", // The link label
+          href: "https://trust.web3auth.io", // The external URL
+        },
+      ],
     },
   ],
   sdk: [
@@ -355,7 +388,12 @@ module.exports = {
             "sdk/pnp/web/adapters/solflare",
           ],
         },
-        "sdk/pnp/web/wagmi-connector"
+        "sdk/pnp/web/wagmi-connector",
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/Web3Auth/web3auth-web/releases", // The external URL
+        },
       ],
     },
     {
@@ -371,12 +409,12 @@ module.exports = {
           collapsible: true,
           collapsed: false,
           label: "Additional Settings",
-          items: [
-            "sdk/pnp/android/whitelabel",
-            "sdk/pnp/android/custom-authentication",
-            "sdk/pnp/android/mfa",
-            "sdk/pnp/android/dapp-share",
-          ],
+          items: ["sdk/pnp/android/whitelabel", "sdk/pnp/android/custom-authentication", "sdk/pnp/android/mfa", "sdk/pnp/android/dapp-share"],
+        },
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/Web3Auth/web3auth-android-sdk/releases", // The external URL
         },
       ],
     },
@@ -393,12 +431,12 @@ module.exports = {
           collapsible: true,
           collapsed: false,
           label: "Additional Settings",
-          items: [
-            "sdk/pnp/ios/whitelabel",
-            "sdk/pnp/ios/custom-authentication",
-            "sdk/pnp/ios/mfa",
-            "sdk/pnp/ios/dapp-share",
-          ],
+          items: ["sdk/pnp/ios/whitelabel", "sdk/pnp/ios/custom-authentication", "sdk/pnp/ios/mfa", "sdk/pnp/ios/dapp-share"],
+        },
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/Web3Auth/web3auth-swift-sdk/releases", // The external URL
         },
       ],
     },
@@ -422,6 +460,11 @@ module.exports = {
             "sdk/pnp/react-native/dapp-share",
           ],
         },
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/Web3Auth/web3auth-react-native-sdk/releases", // The external URL
+        },
       ],
     },
     {
@@ -437,12 +480,12 @@ module.exports = {
           collapsible: true,
           collapsed: false,
           label: "Additional Settings",
-          items: [
-            "sdk/pnp/flutter/whitelabel",
-            "sdk/pnp/flutter/custom-authentication",
-            "sdk/pnp/flutter/mfa",
-            "sdk/pnp/flutter/dapp-share",
-          ],
+          items: ["sdk/pnp/flutter/whitelabel", "sdk/pnp/flutter/custom-authentication", "sdk/pnp/flutter/mfa", "sdk/pnp/flutter/dapp-share"],
+        },
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/Web3Auth/web3auth-flutter-sdk/releases", // The external URL
         },
       ],
     },
@@ -459,12 +502,12 @@ module.exports = {
           collapsible: true,
           collapsed: false,
           label: "Additional Settings",
-          items: [
-            "sdk/pnp/unity/whitelabel",
-            "sdk/pnp/unity/custom-authentication",
-            "sdk/pnp/unity/mfa",
-            "sdk/pnp/unity/dapp-share",
-          ],
+          items: ["sdk/pnp/unity/whitelabel", "sdk/pnp/unity/custom-authentication", "sdk/pnp/unity/mfa", "sdk/pnp/unity/dapp-share"],
+        },
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/Web3Auth/web3auth-unity-sdk/releases", // The external URL
         },
       ],
     },
@@ -481,11 +524,12 @@ module.exports = {
           collapsible: true,
           collapsed: false,
           label: "Additional Settings",
-          items: [
-            "sdk/pnp/unreal/whitelabel",
-            "sdk/pnp/unreal/custom-authentication",
-            "sdk/pnp/unreal/mfa",
-          ],
+          items: ["sdk/pnp/unreal/whitelabel", "sdk/pnp/unreal/custom-authentication", "sdk/pnp/unreal/mfa"],
+        },
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/Web3Auth/web3auth-unreal-sdk/releases", // The external URL
         },
       ],
     },
@@ -502,7 +546,7 @@ module.exports = {
         "sdk/core-kit/mpc-core-kit/install",
         "sdk/core-kit/mpc-core-kit/initialize",
         "sdk/core-kit/mpc-core-kit/authentication",
-        "sdk/core-kit/mpc-core-kit/usage"
+        "sdk/core-kit/mpc-core-kit/usage",
       ],
     },
     {
@@ -520,39 +564,28 @@ module.exports = {
           collapsed: false,
           link: { type: "doc", id: "sdk/core-kit/tkey/modules/modules" },
           items: [
-            "sdk/core-kit/tkey/modules/share-serialization",
-            "sdk/core-kit/tkey/modules/share-transfer",
-            "sdk/core-kit/tkey/modules/chrome-storage",
             "sdk/core-kit/tkey/modules/web-storage",
+            "sdk/core-kit/tkey/modules/react-native-storage",
+            "sdk/core-kit/tkey/modules/chrome-storage",
             "sdk/core-kit/tkey/modules/security-questions",
+            "sdk/core-kit/tkey/modules/share-transfer",
+            "sdk/core-kit/tkey/modules/share-serialization",
             "sdk/core-kit/tkey/modules/seed-phrase",
             "sdk/core-kit/tkey/modules/private-keys",
           ],
         },
-      ],
-    },
-
-    {
-      type: "category",
-      label: "tKey JS in React Native",
-      link: { type: "doc", id: "sdk/core-kit/tkey-react-native/tkey-react-native" },
-      items: [
-        "sdk/core-kit/tkey-react-native/install",
-        "sdk/core-kit/tkey-react-native/initialize",
-        "sdk/core-kit/tkey-react-native/usage",
         {
           type: "category",
-          label: "Modules",
+          label: "Additional Reading",
           collapsible: true,
           collapsed: false,
-          link: { type: "doc", id: "sdk/core-kit/tkey-react-native/modules/modules" },
-          items: [
-            "sdk/core-kit/tkey-react-native/modules/share-serialization",
-            "sdk/core-kit/tkey-react-native/modules/share-transfer",
-            "sdk/core-kit/tkey-react-native/modules/security-questions",
-            "sdk/core-kit/tkey-react-native/modules/seed-phrase",
-            "sdk/core-kit/tkey-react-native/modules/private-keys",
-          ],
+          items: ["sdk/core-kit/tkey/intrinsic-flow"],
+        },
+
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/tkey/tkey/releases", // The external URL
         },
       ],
     },
@@ -576,6 +609,38 @@ module.exports = {
             "sdk/core-kit/tkey-ios/modules/share-transfer",
           ],
         },
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/tkey/tkey-ios/releases", // The external URL
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "tKey Android SDK",
+      link: { type: "doc", id: "sdk/core-kit/tkey-android/tkey-android" },
+      items: [
+        "sdk/core-kit/tkey-android/install",
+        "sdk/core-kit/tkey-android/initialize",
+        "sdk/core-kit/tkey-android/usage",
+        {
+          type: "category",
+          label: "Modules",
+          link: { type: "doc", id: "sdk/core-kit/tkey-android/modules/modules" },
+          items: [
+            "sdk/core-kit/tkey-android/modules/private-keys",
+            "sdk/core-kit/tkey-android/modules/security-questions",
+            "sdk/core-kit/tkey-android/modules/seed-phrase",
+            "sdk/core-kit/tkey-android/modules/share-serialization",
+            "sdk/core-kit/tkey-android/modules/share-transfer",
+          ],
+        },
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/tkey/tkey-android/releases", // The external URL
+        },
       ],
     },
     {
@@ -587,23 +652,33 @@ module.exports = {
         {
           type: "category",
           label: "SFA Web SDK",
-          link: { type: "doc", id: "sdk/core-kit/sfa/sfa" },
+          link: { type: "doc", id: "sdk/core-kit/sfa-web/sfa-web" },
           items: [
-            "sdk/core-kit/sfa/install",
-            "sdk/core-kit/sfa/initialize",
-            "sdk/core-kit/sfa/authentication",
-            "sdk/core-kit/sfa/usage"
+            "sdk/core-kit/sfa-web/install",
+            "sdk/core-kit/sfa-web/initialize",
+            "sdk/core-kit/sfa-web/authentication",
+            "sdk/core-kit/sfa-web/usage",
+            {
+              type: "link",
+              label: "Release Notes", // The link label
+              href: "https://github.com/web3auth/single-factor-auth-web/releases", // The external URL
+            },
           ],
         },
         {
           type: "category",
           label: "SFA Node SDK",
-          link: { type: "doc", id: "sdk/core-kit/node/node" },
+          link: { type: "doc", id: "sdk/core-kit/sfa-node/sfa-node" },
           items: [
-            "sdk/core-kit/node/install",
-            "sdk/core-kit/node/initialize",
-            "sdk/core-kit/node/authentication",
-            "sdk/core-kit/node/usage"
+            "sdk/core-kit/sfa-node/install",
+            "sdk/core-kit/sfa-node/initialize",
+            "sdk/core-kit/sfa-node/authentication",
+            "sdk/core-kit/sfa-node/usage",
+            {
+              type: "link",
+              label: "Release Notes", // The link label
+              href: "https://github.com/web3auth/web3auth-backend/releases", // The external URL
+            },
           ],
         },
         {
@@ -614,7 +689,12 @@ module.exports = {
             "sdk/core-kit/sfa-android/install",
             "sdk/core-kit/sfa-android/initialize",
             "sdk/core-kit/sfa-android/authentication",
-            "sdk/core-kit/sfa-android/usage"
+            "sdk/core-kit/sfa-android/usage",
+            {
+              type: "link",
+              label: "Release Notes", // The link label
+              href: "https://github.com/web3auth/single-factor-auth-android/releases", // The external URL
+            },
           ],
         },
         {
@@ -625,7 +705,39 @@ module.exports = {
             "sdk/core-kit/sfa-ios/install",
             "sdk/core-kit/sfa-ios/initialize",
             "sdk/core-kit/sfa-ios/authentication",
-            "sdk/core-kit/sfa-ios/usage"
+            "sdk/core-kit/sfa-ios/usage",
+            {
+              type: "link",
+              label: "Release Notes", // The link label
+              href: "https://github.com/web3auth/single-factor-auth-swift/releases", // The external URL
+            },
+          ],
+        },
+        {
+          type: "category",
+          label: "SFA React Native SDK",
+          link: { type: "doc", id: "sdk/core-kit/sfa-react-native/sfa-react-native" },
+          items: [
+            "sdk/core-kit/sfa-react-native/install",
+            "sdk/core-kit/sfa-react-native/initialize",
+            "sdk/core-kit/sfa-react-native/authentication",
+            "sdk/core-kit/sfa-react-native/usage",
+          ],
+        },
+        {
+          type: "category",
+          label: "SFA Flutter SDK",
+          link: { type: "doc", id: "sdk/core-kit/sfa-flutter/sfa-flutter" },
+          items: [
+            "sdk/core-kit/sfa-flutter/install",
+            "sdk/core-kit/sfa-flutter/initialize",
+            "sdk/core-kit/sfa-flutter/authentication",
+            "sdk/core-kit/sfa-flutter/usage",
+            {
+              type: "link",
+              label: "Release Notes", // The link label
+              href: "https://github.com/web3auth/single-factor-auth-flutter/releases", // The external URL
+            },
           ],
         },
       ],
@@ -643,7 +755,12 @@ module.exports = {
         "sdk/helper-sdks/providers/evm",
         "sdk/helper-sdks/providers/solana",
         "sdk/helper-sdks/providers/xrpl",
-        "sdk/helper-sdks/providers/common"
+        "sdk/helper-sdks/providers/common",
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/Web3Auth/web3auth-web/releases", // The external URL
+        },
       ],
     },
     {
@@ -652,7 +769,12 @@ module.exports = {
       link: { type: "doc", id: "sdk/helper-sdks/plugins/plugins" },
       items: [
         "sdk/helper-sdks/plugins/evm-wallet",
-        "sdk/helper-sdks/plugins/solana-wallet"
+        "sdk/helper-sdks/plugins/solana-wallet",
+        {
+          type: "link",
+          label: "Release Notes", // The link label
+          href: "https://github.com/Web3Auth/web3auth-web/releases", // The external URL
+        },
       ],
     },
   ],

@@ -7,7 +7,7 @@ blockchain.
 
 Web3Auth is chain agnostic, ie. depending on whatever blockchain or layer-2 you use, Web3Auth can easily support that. Web3Auth has native providers
 for EVM and Solana blockchains and for others, you can get the private key in the user scope and make RPC calls. For standardising the type of
-provider, Web3Auth Base provides a `SafeEventEmitterProvider` from which you can create your own provider.
+provider, Web3Auth Base provides a `IProvider` from which you can create your own provider.
 
 - [Ethereum Provider](/sdk/helper-sdks/providers/evm) gives you the capability of making RPC calls to the EVM compatible blockchains.
 - [Solana Provider](/sdk/helper-sdks/providers/solana) gives you the capability of making RPC calls to the Solana blockchain.
@@ -26,7 +26,7 @@ values={[
 >
 <TabItem value="web3">
 
-```js
+```tsx
 const getAccounts = async () => {
   if (!provider) {
     console.log("provider not initialized yet");
@@ -35,23 +35,30 @@ const getAccounts = async () => {
   const web3 = new Web3(provider as any);
   const userAccounts = await web3.eth.getAccounts();
   console.log(userAccounts);
-}
+};
 ```
 
   </TabItem>
 <TabItem value="ethers.js">
 
-```js
+```tsx
 const getAccounts = async () => {
   if (!provider) {
     console.log("provider not initialized yet");
     return;
   }
-  const provider = new ethers.providers.Web3Provider(provider as any);
-  const signer = provider.getSigner();
-  const userAccounts = await signer.getAddress();
-  console.log(userAccounts);
-}
+  // For ethers v5
+  // const ethersProvider = new ethers.providers.Web3Provider(this.provider);
+  const ethersProvider = new ethers.BrowserProvider(this.provider);
+
+  // For ethers v5
+  // const signer = ethersProvider.getSigner();
+  const signer = await ethersProvider.getSigner();
+
+  // Get the user's Ethereum public address
+  const address = signer.getAddress();
+  console.log(address);
+};
 ```
 
 </TabItem>
@@ -69,7 +76,7 @@ values={[
 >
 <TabItem value="web3">
 
-```js
+```tsx
 const getBalance = async () => {
   if (!provider) {
     console.log("provider not initialized yet");
@@ -79,27 +86,39 @@ const getBalance = async () => {
   const accounts = await web3.eth.getAccounts();
   const balance = await web3.eth.getBalance(accounts[0]);
   console.log(web3.utils.fromWei(balance));
-}
+};
 ```
 
   </TabItem>
 <TabItem value="ethers.js">
 
-```js
+```tsx
 const getBalance = async () => {
   if (!provider) {
     console.log("provider not initialized yet");
     return;
   }
-  const provider = new ethers.providers.Web3Provider(this.provider as any);
-  const signer = provider.getSigner();
-  const account = await signer.getAddress();
-  // Get user's balance in ether
-  const balance = ethers.utils.formatEther(
-    await provider.getBalance(account), // Balance is in wei
+  // For ethers v5
+  // const ethersProvider = new ethers.providers.Web3Provider(this.provider);
+  const ethersProvider = new ethers.BrowserProvider(this.provider);
+
+  // For ethers v5
+  // const signer = ethersProvider.getSigner();
+  const signer = await ethersProvider.getSigner();
+
+  // Get the user's Ethereum public address
+  const address = signer.getAddress();
+
+  // Get the user's balance in ether
+  // For ethers v5
+  // const balance = ethers.utils.formatEther(
+  // await ethersProvider.getBalance(address) // Balance is in wei
+  // );
+  const balance = ethers.formatEther(
+    await ethersProvider.getBalance(address) // Balance is in wei
   );
   console.log(balance);
-}
+};
 ```
 
 </TabItem>
@@ -117,7 +136,7 @@ values={[
 >
 <TabItem value="web3">
 
-```js
+```tsx
 const signMessage = async () => {
   if (!provider) {
     console.log("provider not initialized yet");
@@ -145,24 +164,30 @@ const signMessage = async () => {
     params,
   });
   console.log(signedMessage);
-}
+};
 ```
 
   </TabItem>
 <TabItem value="ethers.js">
 
-```js
+```tsx
 const signMessage = async () => {
   if (!provider) {
     console.log("provider not initialized yet");
     return;
   }
-  const provider = new ethers.providers.Web3Provider(provider);
-  const signer = provider.getSigner();
+  // For ethers v5
+  // const ethersProvider = new ethers.providers.Web3Provider(this.provider);
+  const ethersProvider = new ethers.BrowserProvider(this.provider);
 
-  const originalMessage = "Hello MPC, Bye Bye SeedPhrase";
+  // For ethers v5
+  // const signer = ethersProvider.getSigner();
+  const signer = await ethersProvider.getSigner();
+  const originalMessage = "YOUR_MESSAGE";
 
+  // Sign the message
   const signedMessage = await signer.signMessage(originalMessage);
+
   console.log(signedMessage);
 };
 ```
@@ -173,7 +198,7 @@ const signMessage = async () => {
 
 ### Sign Transaction
 
-```js
+```tsx
 const signTransaction = async () => {
   if (!provider) {
     console.log("provider not initialized yet");
@@ -185,11 +210,11 @@ const signTransaction = async () => {
   const txRes = await web3.eth.signTransaction({
     from: accounts[0],
     to: accounts[0],
-    value: web3.utils.toWei('0.0001'),
+    value: web3.utils.toWei("0.0001"),
     chainId: 1, // change it to your specific chain id.
   });
   console.log(txRes.transactionHash);
-}
+};
 ```
 
 ### Send Transaction
@@ -203,7 +228,7 @@ values={[
 >
 <TabItem value="web3">
 
-```js
+```tsx
 const sendTransaction = async () => {
   if (!provider) {
     console.log("provider not initialized yet");
@@ -215,31 +240,46 @@ const sendTransaction = async () => {
   const txRes = await web3.eth.sendTransaction({
     from: accounts[0],
     to: accounts[0],
-    value: web3.utils.toWei('0.0001'),
+    value: web3.utils.toWei("0.0001"),
     chainId: 1, // change it to your specific chain id.
   });
   console.log(txRes.transactionHash);
-}
+};
 ```
 
   </TabItem>
 <TabItem value="ethers.js">
 
-```js
+```tsx
 const sendTransaction = async () => {
   if (!provider) {
     console.log("provider not initialized yet");
     return;
   }
-  const provider = new ethers.providers.Web3Provider(provider);
-  const signer = provider.getSigner();
-  const address = await signer.getAddress();
+  // For ethers v5
+  // const ethersProvider = new ethers.providers.Web3Provider(this.provider);
+  const ethersProvider = new ethers.BrowserProvider(this.provider);
 
+  // For ethers v5
+  // const signer = ethersProvider.getSigner();
+  const signer = await ethersProvider.getSigner();
+
+  const destination = "0x40e1c367Eca34250cAF1bc8330E9EddfD403fC56";
+
+  // Convert 1 ether to wei
+  // For ethers v5
+  // const amount = ethers.utils.parseEther("0.001");
+  const amount = ethers.parseEther("0.001");
+
+  // Submit transaction to the blockchain
   const tx = await signer.sendTransaction({
-    to: address,
-    value: ethers.utils.parseEther("0.0001"),
-    chainId: 1, // change it to your specific chain id.
+    to: destination,
+    value: amount,
+    maxPriorityFeePerGas: "5000000000", // Max priority fee per gas
+    maxFeePerGas: "6000000000000", // Max fee per gas
   });
+
+  // Wait for the transaction to be mined
   const receipt = await tx.wait();
 
   console.log(receipt.transactionHash);

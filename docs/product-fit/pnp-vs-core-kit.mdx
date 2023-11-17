@@ -5,50 +5,61 @@ displayed_sidebar: docs
 description: "Plug and Play vs Core Kit | Documentation - Web3Auth"
 ---
 
-Plug and Play provide predefined UI & UX flows and easy-to-use SDKs, allowing developers to integrate Web3Auth instances quickly. Our PnP SDKs support
-recovery when they lose access to their device, provided they have enabled MFA.
+import SDKReferenceCards from "@site/src/components/SDKReferenceCards";
 
-Core-Kit are built on top of the Web3Auth infrastructural layer allowing developers to define and develop their UX flows. They choose the Auth
-provider and the factors to determine the key splitting. We also provide Core-Kit with one key using our SFA or Node SDKs. Developers could easily
-switch projects starting with One-Key flow to PnP using a `useCoreKitKey: true` parameter in PnP Web SDKs.
+Choosing the right Web3Auth product involves a careful analysis of what each option offers. Both our Plug and Play and Core-Kit solutions have unique
+features and benefits tailored to meet specific project needs.
 
-| Plug and Play                                                                                               | Core-Kit                                                                                   |
-| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Predefined login UX and UI, with whitelabeling options                                                      | Build and maintain your own UI & UX for login                                              |
-| Recoveribility is easier through `app.openlogin.com`                                                        | You would have to provide recoveribility for your users when they loose access to device   |
-| Out of the box Auth, with options to bring you existing auth and even configure the provided auth providers | Auth setup to be maintained at your end with the option to bring your existing auth set-up |
-| Easy and quick setup for builders and projects going live quickly                                           | Best suited for Enterprizes and builders who want to customize the UX flow                 |
-| Available in Web, Mobile and Gaming SDKs                                                                    | Only available for Web and React Native, but Mobile and Gaming support coming soon         |
+:::caution Pre Planning Product Requirements
 
-## Web3Auth SDKs
+This document helps you understand the differences between the products and helps you make the right choice for your project. This is a very important
+step in the Web3Auth Integration process, please make sure you're making the right choice for your project. **We would recommend you to the SDKs in
+the same stack of products within Web3Auth to minimize the migration efforts.**
 
-### Plug and Play SDKs
+If you're considering using the Core Kit Multi Factor SDKs in the future and want a quick integration to start of, we recommend you to use the Single
+Factor Auth SDKs right now and then move to the Multi Factor SDKs later. This will help you minimize the migration efforts from Plug and Play to Core
+Kit.
 
-#### Web3Auth Plug and Play SDKs for Web
+In a case, where you have already integrated Web3Auth Plug and Play SDKs and want to move to Core Kit, we recommend you to read our
+[Troubleshooting Document around Key Migrations](/troubleshooting/different-private-key#migrating-between-sdks).
 
-- Web3Auth Plug and Play Modal SDK [`@web3auth/modal`](/sdk/pnp/web/modal/)
-- Web3Auth Plug and Play No Modal SDK [`@web3auth/no-modal`](/sdk/pnp/web/no-modal)
+:::
 
-#### Web3Auth Plug and Play SDKs for Mobile
+## Plug and Play
 
-- Web3Auth Plug and Play Android SDK [`web3auth-android-sdk`](/sdk/pnp/android/)
-- Web3Auth Plug and Play iOS SDK [`web3auth-swift-sdk`](/sdk/pnp/ios/)
-- Web3Auth Plug and Play React Native SDK [`web3auth-react-native-sdk`](/sdk/pnp/react-native/)
-- Web3Auth Plug and Play Flutter SDK [`web3auth-flutter-sdk`](/sdk/pnp/flutter/)
+Web3Auth's **Plug and Play** is designed for efficiency and ease of use, offering predefined UI & UX flows and user-friendly SDKs.
 
-#### Web3Auth Plug and Play SDKs for Gaming
+**Key Features:**
 
-- Web3Auth Plug and Play Unity SDK [`web3auth-unity-sdk`](/sdk/pnp/unity/)
-- Web3Auth Plug and Play Unreal SDK [`web3auth-unreal-sdk`](#) - (SDK is out, docs coming soon)
+- **Ease of Integration:** Requires only the initialization of the Web3Auth SDKs and the setup of necessary configurations.
+- **Non Custodial:** By default, the SDKs are non-custodial, meaning that users have complete control over their wallets.
+- **Pre Generated UX/UI Flows:** For ease of integration, this SDK offers predefined UI/UX flow, with full whitelabeling options.
+- **Wallet Aggregator:** Allows you to integrate multiple existing wallets into your application, alongside social logins, to provide users with a
+  seamless login experience of their choice.
+- **Platform Compatibility:** Available for Web, iOS, Android, React Native, Flutter, Unity and Unreal environments.
 
-### Core-Kit SDKs
+## Core-Kit
 
-#### Web3Auth Core-Kit SDKs for Web
+The **Core-Kit** provides a more hands-on approach. It allows developers to define and develop their authentication flows, with Web3Auth being
+invisible to the end-user.
 
-- Web3Auth tKey JS SDK [`@tkey/default`](/sdk/core-kit/tkey/)
-- Web3Auth Single Factor Auth Web SDK [`@web3auth/single-factor-auth`](/sdk/core-kit/sfa/)
-- Web3Auth Node JS SDK [`@web3auth/node-sdk`](/sdk/core-kit/node/)
+**Key Features:**
 
-#### Web3Auth Core-Kit SDKs for Mobile
+- **Customizable UI & UX:** Enables you to build and maintain your own UI & UX for login and MFA.
+- **Owning the Infrastructure:** Enables you to own the wallet management and the authentication flow.
+- **No Redirection:** Unlike PnP, for Core Kit the wallet management flows are not hosted on `app.openlogin.com`. This means that users will not be
+  redirected to a different domain for authentication. All the flows can happen within your application.
+- **Platform Compatibility:** Available for Web, React Native, iOS and Android.
 
-- Web3Auth tKey JS SDK [`@tkey/default`](/sdk/core-kit/tkey/)
+## Comparison Table
+
+|                            | Plug and Play                                                                             | Core-Kit                                                                                                  |
+| -------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| **UI & UX**                | Predefined login UX and UI, with whitelabeling options                                    | Build and maintain your own UI & UX for login and MFA                                                     |
+| **Recoverability**         | Easier through `app.openlogin.com`, requires redirection for key management flows         | Need to build flows for key recovery and management. Everything can happen within the application itself. |
+| **Key Custodiality**       | Non Custodial by design.                                                                  | Integrating application determines the custodiality of the key for the user. All flows are available.     |
+| **Authentication**         | Out of the box Auth, with options to bring your existing authentication and configuration | Auth setup to be maintained at your end, with the option to integrate existing authentication systems.    |
+| **Setup**                  | Easy and quick setup for projects going live quickly                                      | Best suited for enterprises and builders seeking to customize the UX flow                                 |
+| **Platform Compatibility** | Available in Web, Mobile, and Gaming SDKs                                                 | Currently available for Web, React Native, iOS and Android                                                |
+
+<SDKReferenceCards />

@@ -23,32 +23,18 @@ import {
   setURLfromOptions,
   singlefactorauth,
   singlefactorauthandroid,
+  singlefactorauthflutter,
   singlefactorauthios,
+  singlefactorauthrn,
+  tkeyandroid,
   tkeyios,
   tkeyjs,
 } from "../../common/SDKOptions";
-import { CKNode, CKSFA, CKSFAAndroid, CKSFAiOS, CKTkey, CKTkeyiOS, MPCCK } from "./coreKitExamples";
+import { CKNode, CKSFA, CKSFAAndroid, CKSFAFlutter, CKSFAiOS, CKSFARN, CKTkey, CKTkeyAndroid, CKTkeyiOS, MPCCK } from "./coreKitExamples";
 import { PNPUnity, PNPUnreal } from "./pnpGamingExamples";
 import { PNPAndroid, PNPFlutter, PNPIos, PNPRN } from "./pnpMobileExamples";
-import {
-  PNPModalAdditional,
-  PNPModalEVM,
-  PNPModalOther,
-  PNPModalSolana,
-  PNPModalStarkEx,
-  PNPModalStarkNet,
-  PNPModalTezos,
-  PNPModalWagmi,
-} from "./pnpModalExamples";
-import {
-  PNPNoModalAdditional,
-  PNPNoModalCustomAuth,
-  PNPNoModalCustomAuthAggregate,
-  PNPNoModalEVM,
-  PNPNoModalOther,
-  PNPNoModalSolana,
-  PNPNoModalWagmi,
-} from "./pnpNoModalExamples";
+import { PNPModalWebExample } from "./pnpModalExamples";
+import { PNPNoModalWebExample } from "./pnpNoModalExamples";
 import styles from "./styles.module.css";
 
 export default function QuickNavigation() {
@@ -158,33 +144,14 @@ export default function QuickNavigation() {
       <h1>Sample Apps using Web3Auth {sdk}</h1>
       {sdk === pnpwebmodal ? (
         <>
-          <h2>EVM Chain Examples</h2>
-          <Tiles tileGroups={PNPModalEVM} />
-          <h2>Solana Blockchain Examples</h2>
-          <Tiles tileGroups={PNPModalSolana} />
-          <h2>Other Chain Examples</h2>
-          <Tiles tileGroups={PNPModalStarkEx} />
-          <Tiles tileGroups={PNPModalStarkNet} />
-          <Tiles tileGroups={PNPModalTezos} />
-          <Tiles tileGroups={PNPModalOther} />
-          <h2>Additional Examples</h2>
-          <Tiles tileGroups={PNPModalAdditional} />
-          <h2>Wagmi Connector Examples</h2>
-          <Tiles tileGroups={PNPModalWagmi} />
+          <h2>Blockchain React Examples</h2>
+          <Tiles tileGroups={PNPModalWebExample} />
         </>
       ) : null}
       {sdk === pnpwebnomodal ? (
         <>
-          <h2>Blockchain Examples</h2>
-          <Tiles tileGroups={PNPNoModalEVM} />
-          <Tiles tileGroups={PNPNoModalSolana} />
-          <Tiles tileGroups={PNPNoModalOther} />
-          <h2>Custom Authentication Examples</h2>
-          <Tiles tileGroups={PNPNoModalAdditional} />
-          <Tiles tileGroups={PNPNoModalCustomAuth} />
-          <Tiles tileGroups={PNPNoModalCustomAuthAggregate} />
-          <h2>Wagmi Connector Examples</h2>
-          <Tiles tileGroups={PNPNoModalWagmi} />
+          <h2>Blockchain React Examples</h2>
+          <Tiles tileGroups={PNPNoModalWebExample} />
         </>
       ) : null}
       {sdk === pnpandroid ? <Tiles tileGroups={PNPAndroid} /> : null}
@@ -194,11 +161,14 @@ export default function QuickNavigation() {
       {sdk === pnpflutter ? <Tiles tileGroups={PNPFlutter} /> : null}
       {sdk === tkeyjs ? <Tiles tileGroups={CKTkey} /> : null}
       {sdk === tkeyios ? <Tiles tileGroups={CKTkeyiOS} /> : null}
+      {sdk === tkeyandroid ? <Tiles tileGroups={CKTkeyAndroid} /> : null}
       {sdk === mpccorekit ? <Tiles tileGroups={MPCCK} /> : null}
       {sdk === corekitnodejs ? <Tiles tileGroups={CKNode} /> : null}
       {sdk === singlefactorauth ? <Tiles tileGroups={CKSFA} /> : null}
       {sdk === singlefactorauthandroid ? <Tiles tileGroups={CKSFAAndroid} /> : null}
       {sdk === singlefactorauthios ? <Tiles tileGroups={CKSFAiOS} /> : null}
+      {sdk === singlefactorauthrn ? <Tiles tileGroups={CKSFARN} /> : null}
+      {sdk === singlefactorauthflutter ? <Tiles tileGroups={CKSFAFlutter} /> : null}
       {sdk === pnpunreal ? <Tiles tileGroups={PNPUnreal} /> : null}
     </div>
   );

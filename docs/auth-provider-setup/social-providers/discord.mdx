@@ -6,6 +6,9 @@ displayed_sidebar: docs
 description: "Discord Social Login with Web3Auth | Documentation - Web3Auth"
 ---
 
+import TabItem from "@theme/TabItem";
+import Tabs from "@theme/Tabs";
+
 :::info
 
 **[Using Discord with Web3Auth Guide](/content-hub/guides/discord)**
@@ -14,44 +17,44 @@ description: "Discord Social Login with Web3Auth | Documentation - Web3Auth"
 
 ## Create a Discord app
 
-1. Create a Discord [API application](https://discord.com/developers/applications).
+<DiscordSetup />
 
-2. Navigate to **OAuth2** from the sidebar, and paste the following as Redirect URI into the "Redirect URI" field.
-
-   - https://testing.openlogin.com/auth (for Web3Auth testnet used in demo applications)
-
-   - https://app.openlogin.com/auth (for Web3Auth mainnet used in production applications)
-
-   ![Discord OAuth2.0 App Dashboard](/content-hub/social-providers/discord/discord-redirect-uri.png)
-
-3. Don't forget to save your changes!
-
-4. Next, obtain the **"Client ID"** from here. We will use this in our Web3Auth Dashboard.
-
-   ![Discord OAuth2.0 App Client ID and Secret](/content-hub/social-providers/discord/discord-clientid-secret.png)
-
-## Set up Discord Custom Authentication
+## Set up Discord
 
 1. Create a verifier for your Discord application by selecting `Discord` as the Login provider from this modal.
-   ![Login Providers list on Web3Auth Dashboard](/dashboard/verifiers/login-providers-list.png)
+   ![Login Providers list on Web3Auth Dashboard](/images/dashboard/create-verifier-google.png)
 2. Paste the **Client ID** from the Discord App(above) to the `Client ID` field and click on Create.
-   ![Discord Client ID on Web3Auth Dashboard](/dashboard/verifiers/discord-verifier.png)
+   ![Discord Client ID on Web3Auth Dashboard](/images/dashboard/create-verifier-discord.png)
 
-## Example
+### Example
 
-```js
+<Tabs
+defaultValue="modal"
+values={[
+  { label: "Modal", value: "modal" },
+  { label: "NoModal", value: "nomodal" },
+]}
+>
+<TabItem value="modal">
+
+```tsx
 import { Web3Auth } from "@web3auth/modal";
 import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
 
-const clientId = "YOUR_WEB3AUTH_CLIENT_ID";
+const clientId = "BPi5PB_UiIZ-cPz1GtV5i1I2iOSOHuimiXBI0e-Oe_u6X3oVAbCiAZOTEBtTXw4tsluTITPqA8zMsfxIKMjiqNQ";
 // get it from https://dashboard.web3auth.io by creating a Plug n Play project.
 
 const web3auth = new Web3Auth({
   clientId,
-  web3AuthNetwork: "cyan",
+  web3AuthNetwork: "sapphire_mainnet",
   chainConfig: {
     chainNamespace: "eip155",
     chainId: "0x1",
+    rpcTarget: "https://rpc.ankr.com/eth",
+    displayName: "Ethereum Mainnet",
+    blockExplorer: "https://goerli.etherscan.io",
+    ticker: "ETH",
+    tickerName: "Ethereum",
   },
 });
 
@@ -61,9 +64,9 @@ const openloginAdapter = new OpenloginAdapter({
     loginConfig: {
       // Discord login
       discord: {
-        verifier: "YOUR_DISCORD_VERIFIER_NAME", // Pass the Verifier name here
+        verifier: "w3a-discord-demo", // Pass the Verifier name here
         typeOfLogin: "discord", // Pass on the login provider of the verifier you've created
-        clientId: "DISCORD_CLIENT_ID_1234567890", // Pass on the Discord `Client ID` here
+        clientId: "1151006428610433095", // Pass on the Discord `Client ID` here
       },
     },
   },
@@ -77,6 +80,67 @@ await web3auth.initModal();
 await web3auth.connect();
 ```
 
+</TabItem>
+
+<TabItem value="nomodal">
+
+```tsx
+import { Web3AuthNoModal } from "@web3auth/no-modal";
+import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
+import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
+
+const clientId = "BPi5PB_UiIZ-cPz1GtV5i1I2iOSOHuimiXBI0e-Oe_u6X3oVAbCiAZOTEBtTXw4tsluTITPqA8zMsfxIKMjiqNQ";
+// get it from https://dashboard.web3auth.io by creating a project.
+
+const chainConfig = {
+  chainNamespace: "eip155",
+  chainId: "0x1",
+  rpcTarget: "https://rpc.ankr.com/eth",
+  displayName: "Ethereum Mainnet",
+  blockExplorer: "https://goerli.etherscan.io",
+  ticker: "ETH",
+  tickerName: "Ethereum",
+};
+
+const web3auth = new Web3Auth({
+  clientId,
+  chainConfig,
+  web3AuthNetwork: "sapphire_mainnet",
+});
+
+const privateKeyProvider = new EthereumPrivateKeyProvider({
+  config: { chainConfig },
+});
+
+const openloginAdapter = new OpenloginAdapter({
+  privateKeyProvider,
+  adapterSettings: {
+    uxMode: "redirect",
+    loginConfig: {
+      discord: {
+        verifier: "w3a-discord-demo", // Pass the Verifier name here
+        typeOfLogin: "discord", // Pass on the login provider of the verifier you've created
+        clientId: "1151006428610433095", // Pass on the Discord `Client ID` here
+      },
+    },
+  },
+});
+web3auth.configureAdapter(openloginAdapter);
+setWeb3auth(web3auth);
+
+// Initialize
+await web3auth.init();
+
+// Login with Discord
+await web3auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, {
+  loginProvider: "discord",
+});
+```
+
+</TabItem>
+
+</Tabs>
+
 ## Troubleshoot
 
 ### Duplicate token found
@@ -86,7 +150,7 @@ await web3auth.connect();
 Receiving `Could not get result from torus nodes Duplicate token found` error when using Custom verifier for Discord?
 
 - This is because Discord issues the same token for 30 mins.
-- We revoke it for you for default verifiers( such as when using Web3Auth Modal `@webauth/modal`).
+- We revoke it for you for default verifiers( such as when using Web3Auth Modal `@web3auth/modal`).
 - But when using Custom Verifier for Discord, the integrating dApps have to revoke the token themself before attempting the next login by using
   discord clientId and secret to revoke the token.
 
@@ -94,7 +158,7 @@ Receiving `Could not get result from torus nodes Duplicate token found` error wh
 
 Here's the sample code to revoke the token:
 
-```js
+```tsx
 const axios = require("axios").default;
 const FormData = require("form-data");
 
@@ -106,6 +170,81 @@ await axios.post("https://discord.com/api/oauth2/token/revoke", formData, {
   headers: {
     ...formData.getHeaders(),
     Authorization: `Basic ${Buffer.from(`${DISCORD_CLIENT_ID}:${DISCORD_CLIENT_SECRET}`, "binary").toString("base64")}`,
+  },
+});
+```
+
+## Set up [Discord](https://marketplace.auth0.com/integrations/discord-social-connection) via Auth0
+
+1. Create a verifier for your Auth0 application by selecting `Auth0` as the Login provider from this modal.
+   ![Discord - Login Providers list on Web3Auth Dashboard](/images/dashboard/create-verifier-auth0.png)
+2. Select the `Discord` as the **Authentication Type** based on the dropdown.
+   ![Discord - Auth0 Authentication Type list on Web3Auth Dashboard](/images/dashboard/create-verifier-google.png)
+3. Enter the `Auth0 Client ID` and `Auth0 Domain` from your Auth0 application. See how to create a new Auth0 application
+   [here](https://auth0.com/docs/quickstart/webapp/).
+
+   ![Discord - Domain and Client ID from Auth0 Dashboard](/images/dashboard/create-verifier-auth0-filled-common.png)
+   ![Discord - Auth0 Client ID and Auth0 Domain on Web3Auth Dashboard](/images/dashboard/create-verifier-auth0-unfilled.png)
+
+4. Add the [Discord Social Connection](https://marketplace.auth0.com/integrations/discord-social-connection) to your Auth0 application.
+5. Click on the `Create` button to create `Discord` Custom Authentication via Auth0 verifier.
+
+### Example
+
+```tsx
+import { Web3AuthNoModal } from "@web3auth/no-modal";
+import { OpenloginAdapter } from "@web3auth/openlogin-adapter";
+import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
+
+const clientId = "BPi5PB_UiIZ-cPz1GtV5i1I2iOSOHuimiXBI0e-Oe_u6X3oVAbCiAZOTEBtTXw4tsluTITPqA8zMsfxIKMjiqNQ";
+// get it from https://dashboard.web3auth.io by creating a project.
+
+const chainConfig = {
+  chainNamespace: "eip155",
+  chainId: "0x1",
+  rpcTarget: "https://rpc.ankr.com/eth",
+  displayName: "Ethereum Mainnet",
+  blockExplorer: "https://goerli.etherscan.io",
+  ticker: "ETH",
+  tickerName: "Ethereum",
+};
+
+const web3auth = new Web3Auth({
+  clientId,
+  chainConfig,
+  web3AuthNetwork: "sapphire_mainnet",
+});
+
+const privateKeyProvider = new EthereumPrivateKeyProvider({
+  config: { chainConfig },
+});
+
+const openloginAdapter = new OpenloginAdapter({
+  privateKeyProvider,
+  adapterSettings: {
+    uxMode: "redirect",
+    loginConfig: {
+      jwt: {
+        verifier: "w3a-auth0-demo", // Pass the Verifier name here
+        typeOfLogin: "jwt", // Pass on the login provider of the verifier you've created
+        clientId: "hUVVf4SEsZT7syOiL0gLU9hFEtm2gQ6O", // Pass on the Auth0 `Client ID` here
+      },
+    },
+  },
+});
+web3auth.configureAdapter(openloginAdapter);
+setWeb3auth(web3auth);
+
+// Initialize
+await web3auth.init();
+
+// Login with Discord
+await web3auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, {
+  loginProvider: "jwt",
+  extraLoginOptions: {
+    domain: "https://web3auth.au.auth0.com", // Pass on the Auth0 `Domain` here
+    verifierIdField: "sub", // Pass on the field name of the `sub` field in the JWT
+    connection: "discord", // Use this to skip Auth0 Modal for Discord login
   },
 });
 ```

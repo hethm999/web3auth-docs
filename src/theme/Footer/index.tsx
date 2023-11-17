@@ -4,7 +4,6 @@ import Discord from "@site/static/images/social/discord.svg";
 import GitHub from "@site/static/images/social/github.svg";
 import LinkedIn from "@site/static/images/social/linkedin.svg";
 import Medium from "@site/static/images/social/medium.svg";
-import Telegram from "@site/static/images/social/telegram.svg";
 import Twitter from "@site/static/images/social/twitter.svg";
 import YouTube from "@site/static/images/social/youtube.svg";
 import ThemedImage from "@theme/ThemedImage";
@@ -41,7 +40,7 @@ export default function FooterComponent(): JSX.Element {
                 dark: `${baseUrl}images/logo-dark.svg`,
               }}
             />
-            <p>Web3Auth is where passwordless auth meets non-custodial key infrastructure for Web3 apps and wallets.</p>
+            <p>Web3Auth is where passwordless auth meets non-custodial wallet infrastructure for Web3 apps and wallets.</p>
             <div style={{ flexDirection: "row" }}>
               <a href="https://github.com/web3auth/web3auth-web" style={{ marginRight: 8 }} target="_blank" rel="noreferrer">
                 <GitHub />
@@ -57,9 +56,6 @@ export default function FooterComponent(): JSX.Element {
               </a>
               <a href="https://youtube.com/c/web3auth" style={{ marginRight: 8 }} target="_blank" rel="noreferrer">
                 <YouTube />
-              </a>
-              <a href="https://t.me/web3auth" style={{ marginRight: 8 }} target="_blank" rel="noreferrer">
-                <Telegram />
               </a>
               <a href="https://www.linkedin.com/company/web3auth" style={{ marginRight: 8 }} target="_blank" rel="noreferrer">
                 <LinkedIn />
@@ -137,8 +133,8 @@ export default function FooterComponent(): JSX.Element {
               </a>
             </div>
             <div className="footer__item">
-              <a className="footer__link-item" href="https://web3auth.io/partners.html" target="_blank" rel="noreferrer">
-                Partners
+              <a className="footer__link-item" href="https://web3auth.io/customers.html" target="_blank" rel="noreferrer">
+                Customers
               </a>
             </div>
             <div className="footer__item">
@@ -163,7 +159,7 @@ export default function FooterComponent(): JSX.Element {
             </div>
             <div className="footer__item">
               <a className="footer__link-item" href="https://web3auth.io/community/" target="_blank" rel="noreferrer">
-                Community Discussions
+                Community Forum
               </a>
             </div>
             {/* <div className="footer__item">

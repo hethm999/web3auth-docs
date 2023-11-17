@@ -8,13 +8,13 @@ description: "Web3Auth PnP React Native SDK - Initialization  | Documentation - 
 import TabItem from "@theme/TabItem";
 import Tabs from "@theme/Tabs";
 
-After Installation, the next step to use Web3Auth is to Initialize the SDK. The Initialization is a two step process,
+After Installation, the next step to use Web3Auth is to Initialize the SDK. The Initialization is a two-step process,
 
 - [Importing Required Packages](#importing-required-packages)
 - [Instantiating Web3Auth](#instantiating-web3auth)
 
 Please note that these are the most critical steps where you need to pass on different parameters according to the preference of your project.
-Additionally, Whitelabeling and Custom Authentication have to be configured within this step, if you wish to customise your Web3Auth Instance.
+Additionally, Whitelabeling and Custom Authentication have to be configured within this step, if you wish to customize your Web3Auth Instance.
 
 ## Importing Required packages
 
@@ -53,15 +53,70 @@ import * as WebBrowser from "@toruslabs/react-native-web-browser";
 </TabItem>
 </Tabs>
 
-## Instantiating Web3Auth
+### Importing a `Storage` implementation
+
+<Tabs
+  defaultValue="expo"
+  values={[
+    { label: "Expo Managed Workflow", value: "expo" },
+    { label: "Bare React Native Workflow", value: "bare" },
+  ]}
+>
+
+<TabItem value="expo">
 
 ```typescript
-const web3auth = new Web3Auth(WebBrowser, SdkInitParams);
+import * as SecureStore from "expo-secure-store";
 ```
+
+</TabItem>
+
+<TabItem value="bare">
+
+```typescript
+import EncryptedStorage from "react-native-encrypted-storage";
+```
+
+</TabItem>
+</Tabs>
+
+## Instantiating Web3Auth
+
+:::info NOTE
+
+Now with `react-native-sdk` v4 `SecureStore` or `EncryptedStorage` gets passed with the Web3Auth constructor, depending on the workflow you are using.
+This is due to the addition of session management without storing the private key in the device.
+
+:::
+
+<Tabs
+  defaultValue="expo"
+  values={[
+    { label: "Expo Managed Workflow", value: "expo" },
+    { label: "Bare React Native Workflow", value: "bare" },
+  ]}
+>
+
+<TabItem value="expo">
+
+```typescript
+const web3auth = new Web3Auth(WebBrowser, SecureStore, SdkInitParams);
+```
+
+</TabItem>
+
+<TabItem value="bare">
+
+```typescript
+const web3auth = new Web3Auth(WebBrowser, EncryptedStorage, SdkInitParams);
+```
+
+</TabItem>
+</Tabs>
 
 ### `SdkInitParams` object
 
-The `Web3Auth` constructor in the React Native SDK take an `SdkInitParams` object respectively as an argument. The fields of such object are listed
+The `Web3Auth` constructor in the React Native SDK takes an `SdkInitParams` object respectively as an argument. The fields of such objects are listed
 below.
 
 <Tabs
@@ -74,43 +129,51 @@ below.
 
 <TabItem value="table">
 
-| Parameter   | Type                                                 | Mandatory | Description                                                                                                                                   |
-| ----------- | ---------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| clientId    | String                                               | Yes       | Your Web3Auth project ID obtained from the Web3Auth dashboard                                                                                 |
-| network     | Choose between `mainnet`, `cyan`,`aqua`, , `testnet` | Yes       | Web3Auth network to run on, either CYAN, MAINNET, AQUA or TESTNET                                                                             |
-| redirectUrl | String                                               | No        | The redirectUrl that the Web3Auth login flow will use to redirect back to the app.                                                            |
-| loginConfig | LoginConfig                                          | No        | A configuration optional object to customize login flow.                                                                                      |
-| whiteLabel  | WhiteLabelData                                       | No        | A configuration optional object to customize UI, branding, and translations for your brand. Refer to the WhiteLabeling section for more info. |
-| sdkUrl      | String                                               | No        | The url to the SDK frontend, should not need any changes normally.                                                                            |
+| Parameter     | Type                                                  | Mandatory | Description                                                                                                                                                                                                           |
+| ------------- | ----------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| clientId      | String                                                | Yes       | Your Web3Auth project ID obtained from the Web3Auth dashboard                                                                                                                                                         |
+| network       | Choose between `sapphire_mainnet`, `sapphire_testnet` | Yes       | Web3Auth network to run on, either `sapphire_mainnet` or `sapphire_testnet`                                                                                                                                           |
+| redirectUrl   | String                                                | No        | The redirectUrl that the Web3Auth login flow will use to redirect back to the app.                                                                                                                                    |
+| loginConfig   | LoginConfig                                           | No        | A configuration optional object to customize login flow.                                                                                                                                                              |
+| whiteLabel    | WhiteLabelData                                        | No        | A configuration optional object to customize UI, branding, and translations for your brand. Refer to the WhiteLabeling section for more info.                                                                         |
+| sessionTime   | Any number from 1 to 86400\*7. Default is 86400       | No        | Decides how long should a login session last in seconds                                                                                                                                                               |
+| mfaSettings   | MfaSettings                                           | No        | This parameter will be used to enable mfa factors and set priority on UI listing. List of factors available <ul><li>backUpShareFactor</li><li>socialFactor</li><li>passwordFactor</li><li>deviceShareFactor</li></ul> |
+| useCoreKitKey | boolean                                               | No        | Use `useCoreKitKey` as `true`, if you're using this SDK with the Single Factor Auth Web SDK                                                                                                                           |
+| sdkUrl        | String                                                | No        | The url to the SDK frontend, should not need any changes normally.                                                                                                                                                    |
 
 </TabItem>
 
 <TabItem value="interface">
 
-```js
+```tsx
 export type SdkInitParams = {
   /**
    * You can get your clientId/projectId by registering your
-   * dapp on {@link "https://developer.tor.us"| developer dashbaord}
+   * dapp on {@link "https://dashboard.web3auth.io"| developer dashboard}
    */
-  clientId: string,
+  clientId: string;
   /**
-   * network specifies the specific web3auth network to be used.
+   * network specifies the openlogin sdk url to be used.
    *
    * - `'mainnet'`: https://app.openlogin.com will be used which is the production version.
    * - `'cyan'`: https://cyan.openlogin.com will be used which is the production cyan version.
-   * - `'aqua'`: https://aqua.openlogin.com will be used which is the production aqua version.
-   * - `'testnet'`: https://beta.openlogin.com will be used which is the beta version.
+   * - `'testnet'`: https://testing.openlogin.com will be used which is the testing version.
+   * - `'development'`: http://localhost:3000 will be used for development purpose.
    */
-  network: OPENLOGIN_NETWORK_TYPE,
+  network: OPENLOGIN_NETWORK_TYPE;
+  /**
+   * This parameter will be used to change the build environment of openlogin sdk.
+   * @defaultValue production
+   */
+  buildEnv?: BUILD_ENV_TYPE;
   /**
    * redirectUrl is the dapp's url where user will be redirected after login.
    *
    * @remarks
-   * Register this url at {@link "https://developer.tor.us"| developer dashbaord}
+   * Register this url at {@link "https://dashboard.web3auth.io"| developer dashboard}
    * else initialization will give error.
    */
-  redirectUrl?: string,
+  redirectUrl?: string;
   /**
    * loginConfig enables you to pass your own login verifiers configuration for various
    * loginProviders.
@@ -119,19 +182,48 @@ export type SdkInitParams = {
    * should be custom configuration for that loginProvider
    *
    * @remarks
-   * You can deploy your own verifiers from {@link "https://developer.tor.us"| developer dashbaord}
+   * You can deploy your own verifiers from {@link "https://dashboard.web3auth.io"| developer dashboard}
    * to use here.
    *
    */
-  loginConfig?: LoginConfig,
+  loginConfig?: LoginConfig;
   /**
    * options for whitelabling default openlogin modal.
    */
-  whiteLabel?: WhiteLabelData,
+  whiteLabel?: WhiteLabelData;
   /**
-   * sdkUrl is the url to the sdk frontend, should not need any changes normally.
+   * Specify a custom storage server url
+   * @defaultValue https://broadcast-server.tor.us
+   * @internal
    */
-  sdkUrl?: string,
+  storageServerUrl?: string;
+  /**
+   * setting to "local" will persist social login session accross browser tabs.
+   *
+   * @defaultValue "local"
+   */
+  storageKey?: "session" | "local";
+  /**
+   * How long should a login session last at a minimum in seconds
+   *
+   * @defaultValue 86400 seconds
+   * @remarks Max value of sessionTime can be 7 * 86400 (7 days)
+   */
+  sessionTime?: number;
+  /**
+   * This parameter will be used to enable mfa factors and set priority on UI listing.
+   * List of factors available
+   * backUpShareFactor | socialFactor | passwordFactor
+   * @defaultValue false
+   */
+  mfaSettings?: MfaSettings;
+  /**
+   * This parameter will be used to use openlogin mpc
+   * @defaultValue false
+   */
+  useMpc?: boolean;
+  enableLogging?: boolean;
+  useCoreKitKey?: boolean;
 };
 ```
 
@@ -153,8 +245,9 @@ export type SdkInitParams = {
 
 <TabItem value="expo">
 
-```js
+```tsx
 import * as WebBrowser from "expo-web-browser";
+import * as SecureStore from "expo-secure-store";
 import Web3Auth, { LOGIN_PROVIDER, OPENLOGIN_NETWORK } from "@web3auth/react-native-sdk";
 
 const resolvedRedirectUrl =
@@ -164,9 +257,9 @@ const resolvedRedirectUrl =
 
 const clientId = "YOUR WEB3AUTH CLIENT ID";
 
-const web3auth = new Web3Auth(WebBrowser, {
+const web3auth = new Web3Auth(WebBrowser, SecureStore, {
   clientId,
-  network: OPENLOGIN_NETWORK.TESTNET, // or other networks
+  network: OPENLOGIN_NETWORK.SAPPHIRE_MAINNET, // or other networks
 });
 ```
 
@@ -174,8 +267,9 @@ const web3auth = new Web3Auth(WebBrowser, {
 
 <TabItem value="bare">
 
-```js
+```tsx
 import * as WebBrowser from "@toruslabs/react-native-web-browser";
+import EncryptedStorage from "react-native-encrypted-storage";
 import Web3Auth, { LOGIN_PROVIDER, OPENLOGIN_NETWORK } from "@web3auth/react-native-sdk";
 
 const scheme = "web3authrnbareauth0example"; // Or your desired app redirection scheme
@@ -183,9 +277,9 @@ const resolvedRedirectUrl = `${scheme}://openlogin`;
 
 const clientId = "YOUR WEB3AUTH CLIENT ID";
 
-const web3auth = new Web3Auth(WebBrowser, {
+const web3auth = new Web3Auth(WebBrowser, EncryptedStorage, {
   clientId,
-  network: OPENLOGIN_NETWORK.TESTNET, // or other networks
+  network: OPENLOGIN_NETWORK.SAPPHIRE_MAINNET, // or other networks
 });
 ```
 
@@ -193,8 +287,9 @@ const web3auth = new Web3Auth(WebBrowser, {
 
 <TabItem value="expocustom">
 
-```js
+```tsx
 import * as WebBrowser from "expo-web-browser";
+import * as SecureStore from "expo-secure-store";
 import Web3Auth, { LOGIN_PROVIDER, OPENLOGIN_NETWORK } from "@web3auth/react-native-sdk";
 
 const resolvedRedirectUrl =
@@ -204,9 +299,9 @@ const resolvedRedirectUrl =
 
 const clientId = "YOUR WEB3AUTH CLIENT ID";
 
-const web3auth = new Web3Auth(WebBrowser, {
+const web3auth = new Web3Auth(WebBrowser, SecureStore, {
   clientId,
-  network: OPENLOGIN_NETWORK.TESTNET, // or other networks
+  network: OPENLOGIN_NETWORK.SAPPHIRE_MAINNET, // or other networks
   loginConfig: {
     jwt: {
       name: "Web3Auth-Auth0-JWT",
@@ -222,8 +317,9 @@ const web3auth = new Web3Auth(WebBrowser, {
 
 <TabItem value="barecustom">
 
-```js
+```tsx
 import * as WebBrowser from "@toruslabs/react-native-web-browser";
+import EncryptedStorage from "react-native-encrypted-storage";
 import Web3Auth, { LOGIN_PROVIDER, OPENLOGIN_NETWORK } from "@web3auth/react-native-sdk";
 
 const scheme = "web3authrnbareauth0example"; // Or your desired app redirection scheme
@@ -231,9 +327,9 @@ const resolvedRedirectUrl = `${scheme}://openlogin`;
 
 const clientId = "YOUR WEB3AUTH CLIENT ID";
 
-const web3auth = new Web3Auth(WebBrowser, {
+const web3auth = new Web3Auth(WebBrowser, EncryptedStorage, {
   clientId,
-  network: OPENLOGIN_NETWORK.TESTNET, // or other networks
+  network: OPENLOGIN_NETWORK.SAPPHIRE_MAINNET, // or other networks
   loginConfig: {
     jwt: {
       name: "Web3Auth-Auth0-JWT",

@@ -12,7 +12,7 @@ import Tabs from "@theme/Tabs";
 
 ## [`@web3auth/wallet-connect-v2-adapter`](https://npmjs.com/package/@web3auth/wallet-connect-v2-adapter)
 
-Wallet connect v2 adapter allows you login with wallet connect v2. You can read more about wallet connect [here](https://docs.walletconnect.com/).
+Wallet connect v2 adapter allows you to log in with wallet connect v2. You can read more about Walletconnect [here](https://docs.walletconnect.com/).
 
 ## Basic Details
 
@@ -53,10 +53,12 @@ npm install --save @web3auth/wallet-connect-v2-adapter
 
 <TabItem value="interface">
 
-```ts
-interface WalletConnectV2AdapterOptions {
+```tsx
+interface WalletConnectV2AdapterOptions extends BaseAdapterSettings {
   adapterSettings?: IAdapterSettings;
   loginSettings?: EngineTypes.ConnectParams;
+}
+interface BaseAdapterSettings {
   clientId?: string;
   sessionTime?: number;
   chainConfig?: Partial<CustomChainConfig> & Pick<CustomChainConfig, "chainNamespace">;
@@ -75,8 +77,8 @@ interface WalletConnectV2AdapterOptions {
 
 :::caution
 
-While you can pass your `chainConfig` here, but it is not required since you can directly pass it over to the `Web3Auth`/ `Web3AuthNoModal`
-configuration while instantiating it.
+While you can pass your `chainConfig` here, it is not required since you can directly pass it over to the `Web3Auth`/ `Web3AuthNoModal` configuration
+while instantiating it.
 
 Read more about it in their respective sections:
 
@@ -95,21 +97,25 @@ If you pass `chainConfig` in an Adapter, it overwrites the `chainConfig` passed 
 
 #### `adapterSettings`
 
-```ts
+```tsx
 interface IAdapterSettings {
   walletConnectInitOptions?: SignClientTypes.Options;
   qrcodeModal?: IQRCodeModal;
 }
 
-export interface IQRCodeModal {
-  open(uri: string, cb: any, opts?: any): void;
-  close(): void;
+interface IQRCodeModal {
+  openModal: (options?: OpenOptions) => Promise<void>;
+  closeModal: () => void;
+}
+interface OpenOptions {
+  uri: string;
+  chains?: string[];
 }
 ```
 
 ## getWalletConnectV2Settings
 
-You can get walletConnectV2 settings by calling the `getWalletConnectV2Settings()` function with it's required arguments.
+You can get walletConnectV2 settings by calling the `getWalletConnectV2Settings()` function with its required arguments.
 
 ### Arguments
 
@@ -126,51 +132,26 @@ You can get walletConnectV2 settings by calling the `getWalletConnectV2Settings(
 | Parameter   | type                                                                   |
 | ----------- | ---------------------------------------------------------------------- |
 | `namespace` | `ChainNamespaceType`, e.g. (`eip155`)                                  |
-| `chainIds`  | `number[]` e.g. [1, 5, 137]                                            |
+| `chainIds`  | `number[]` e.g. [1]                                                    |
 | `projectID` | WalletConnect Project ID, get one from https://cloud.walletconnect.com |
 
 </TabItem>
 
 <TabItem value="function">
 
-```ts
-export const getWalletConnectV2Settings = async (
+```tsx
+export declare const getWalletConnectV2Settings: (
   namespace: ChainNamespaceType,
   chainIds: number[],
   projectID: string
-): Promise<{
+) => Promise<{
   adapterSettings: IAdapterSettings;
   loginSettings: EngineTypes.ConnectParams;
-}> => {
-  if (namespace === CHAIN_NAMESPACES.EIP155) {
-    const appMetadata = await getSiteMetadata();
-    const adapterSettings: IAdapterSettings = {
-      walletConnectInitOptions: {
-        projectId: projectID,
-        relayUrl: "wss://relay.walletconnect.com",
-        metadata: {
-          name: appMetadata.name,
-          description: appMetadata.name,
-          url: window.location.origin,
-          icons: [appMetadata.icon || ""],
-        },
-      },
-    };
-
-    const chainNamespaces = chainIds.map((chainId) => {
-      return `${namespace}:${chainId}`;
-    });
-
-    const loginSettings: EngineTypes.ConnectParams = {
-      requiredNamespaces: getRequiredNamespaces(chainNamespaces),
-    };
-    return {
-      adapterSettings,
-      loginSettings,
-    };
-  }
-  throw new Error(`Unsupported chain namespace: ${namespace}`);
-};
+}>;
+export interface IAdapterSettings {
+  walletConnectInitOptions?: SignClientTypes.Options;
+  qrcodeModal?: IQRCodeModal;
+}
 ```
 
 </TabItem>
@@ -179,12 +160,14 @@ export const getWalletConnectV2Settings = async (
 
 ## Example
 
-```ts
-import { WalletConnectV2Adapter, getWalletConnectV2Settings } from "@web3auth/wallet-connect-v2-adapter";
+```tsx
+import { WalletConnectModal } from "@walletconnect/modal";
+import { getWalletConnectV2Settings, WalletConnectV2Adapter } from "@web3auth/wallet-connect-v2-adapter";
 
-const defaultWcSettings = await getWalletConnectV2Settings("eip155", [1, 5, 137], "04309ed1007e77d1f119b85205bb779d");
+const defaultWcSettings = await getWalletConnectV2Settings("eip155", [1], "04309ed1007e77d1f119b85205bb779d");
+const walletConnectModal = new WalletConnectModal({ projectId: "04309ed1007e77d1f119b85205bb779d" });
 const walletConnectV2Adapter = new WalletConnectV2Adapter({
-  adapterSettings: { ...defaultWcSettings.adapterSettings },
+  adapterSettings: { qrcodeModal: walletConnectModal, ...defaultWcSettings.adapterSettings },
   loginSettings: { ...defaultWcSettings.loginSettings },
 });
 

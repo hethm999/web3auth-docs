@@ -38,7 +38,7 @@ to develop a basic web application on the Ethereum blockchain.
 ## Quick Start
 
 ```bash
-npx degit Web3Auth/web3auth-pnp-examples/web-no-modal-sdk/custom-authentication/facebook-react-no-modal-example w3a-facebook-demo && cd w3a-facebook-demo && npm install && npm run start
+npx degit Web3Auth/web3auth-pnp-examples/web-no-modal-sdk/custom-authentication/single-verifier-examples/facebook-no-modal-example w3a-facebook-demo && cd w3a-facebook-demo && npm install && npm run start
 ```
 
 ## How it works?
@@ -142,7 +142,7 @@ the loginConfig object. This makes sure that the Openlogin Adapter can connect t
 
 Once initialized, you can use the `connectTo()` function to authenticate the user when they click the login button.
 
-```js
+```tsx
 import { WALLET_ADAPTERS, CHAIN_NAMESPACES } from "@web3auth/base";
 
 await web3auth.connectTo(WALLET_ADAPTERS.OPENLOGIN, {
@@ -154,7 +154,7 @@ When connecting, your `connectTo` function takes the arguments for the adapter y
 
 ### Get the User Profile
 
-```js
+```tsx
 const user = await web3auth.getUserInfo();
 console.log("User info", user);
 ```
@@ -164,7 +164,7 @@ network, but are fetched from the id_token you received from AWS Cognito and liv
 
 ### Logout
 
-```js
+```tsx
 await web3auth.logout();
 ```
 
@@ -177,7 +177,7 @@ Logging out your user is as simple as calling the `logout` function.
 ## Example code
 
 The code for the application we developed in this guide can be found in the
-[Web3Auth Core Facebook Login Example](https://github.com/Web3Auth/web3auth-pnp-examples/tree/main/web-no-modal-sdk/custom-authentication/facebook-react-no-modal-example).
+[Web3Auth Core Facebook Login Example](https://github.com/Web3Auth/web3auth-pnp-examples/tree/main/web-no-modal-sdk/custom-authentication/single-verifier-examples/facebook-no-modal-example).
 Check it out and try running it locally yourself!
 
 ## Questions?
